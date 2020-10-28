@@ -47,13 +47,39 @@ def allAnimes():
     except:
         print('We have any error while opening the file.')
 
+def updateEpSe():
+    try:
+        allLines = []
+        with open('assets/list.txt', 'r', encoding = 'utf-8') as file:
+            allAnimes()
+            sLine = int(input('What is the line you want to change: '))
+
+            sEp = input('Okay, enter the new episode: ')
+            sSe = input('Okay, enter the new season: ')
+
+            # returns a list of remaining lines of the entire file
+            allLines = file.readlines()
+
+            spline = allLines[sLine-1].split(" (")
+
+            # .strip() removes any leading (spaces at the beginning) and trailing (spaces at the end)
+            print('Edit "{}" to: {} (ep: {}, season: {})\n'.format(allLines[sLine-1].strip(), spline[0].strip(), sEp, sSe))
+            allLines[sLine - 1] = '{} (ep: {}, season: {})\n'.format(spline[0].strip(), sEp, sSe)
+
+        with open('assets/list.txt', 'w', encoding = 'utf-8') as file:
+            for nLines in allLines:
+                file.write(nLines)
+        print('Your anime are edited with success.')
+    except:
+        print('We have any error while opening the file.')
+
 def main():
     print('Welcome, today is: {};'.format(theTime(1)))
     print('----------MENU----------')
     
     sOp = -1
     while sOp != 0:
-        print('Select an option:\n1 - CREATE\n2 - READ\n0 - EXIT')
+        print('Select an option:\n1 - CREATE\n2 - READ\n3 - EDIT\n0 - EXIT')
         sOp = int(input('\nEnter selected option: '))
 
         if sOp == 1:
@@ -69,6 +95,10 @@ def main():
             print('\n----------START READ ANIMES----------\nEx: <note> on <MM/DD/YYYY>\n')
             allAnimes()
             print('\n----------END READ ANIMES----------\n')
+        if sOp == 3:
+            print('\n----------START EDIT ANIMES----------\nEx: <line> - <anime> (ep: <episode>, season: <season>)\n')
+            updateEpSe()
+            print('\n----------END EDIT ANIMES----------\n')
         if ((sOp < 1 and sOp != 0) or sOp > 4):
             print('(^-^)b - "sorry, i can\'t make this."')
         if sOp == 0:
