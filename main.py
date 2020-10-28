@@ -73,13 +73,35 @@ def updateEpSe():
     except:
         print('We have any error while opening the file.')
 
+def delete():
+    try:
+        allLines = []
+
+        allAnimes()
+        sLine = int(input('What is the line you want to delete: '))
+
+        if sLine <= getLen() and sLine >= 1:
+            with open('assets/list.txt', 'r', encoding = 'utf-8') as file:
+                # .pop() removes the element at the specified position
+                allLines = file.readlines()
+                allLines.pop(sLine - 1)
+
+                with open('assets/list.txt', 'w', encoding = 'utf-8') as file:
+                    for nLines in allLines:
+                        file.write(nLines)
+            print('Your anime are deleted with success.')
+        else:
+            print("Invalid line.")
+    except:
+        print('We have any error while opening the file.')
+
 def main():
     print('Welcome, today is: {};'.format(theTime(1)))
     print('----------MENU----------')
     
     sOp = -1
     while sOp != 0:
-        print('Select an option:\n1 - CREATE\n2 - READ\n3 - EDIT\n0 - EXIT')
+        print('Select an option:\n1 - CREATE\n2 - READ\n3 - EDIT\n4 - DELETE\n0 - EXIT')
         sOp = int(input('\nEnter selected option: '))
 
         if sOp == 1:
@@ -99,6 +121,10 @@ def main():
             print('\n----------START EDIT ANIMES----------\nEx: <line> - <anime> (ep: <episode>, season: <season>)\n')
             updateEpSe()
             print('\n----------END EDIT ANIMES----------\n')
+        if sOp == 4:
+            print('\n----------START DELETE ANIMES----------\n')
+            delete()
+            print('\n----------END DELETE ANIMES----------\n')
         if ((sOp < 1 and sOp != 0) or sOp > 4):
             print('(^-^)b - "sorry, i can\'t make this."')
         if sOp == 0:
