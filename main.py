@@ -25,10 +25,27 @@ def getLen():
         return -1
 
 def addAnime(tAnime):
-    with open('assets/list.txt', 'a', encoding = 'utf-8') as file:
-        # write new note at the EOF line - <note> on <MM/DD/YYYY>
-        file.write('{}'.format(tAnime))
-    print('You added a new anime to the list.')
+    try:
+        with open('assets/list.txt', 'a', encoding = 'utf-8') as file:
+            # write new note at the EOF line - <note> on <MM/DD/YYYY>
+            file.write('{}'.format(tAnime))
+        print('You added a new anime to the list.')
+        
+    except:
+        print('We have any error while opening the file.')
+
+def allAnimes():
+    try:
+        with open('assets/list.txt', 'r', encoding = 'utf-8') as file:
+            # bring file cursor to initial position
+            file.seek(0)
+            allLines = file.readlines()
+
+            for i, line in enumerate(allLines):
+                print("{} - {}".format(i+1, line.strip()))
+            print("\nYou have {} animes in list.".format(getLen()))
+    except:
+        print('We have any error while opening the file.')
 
 def main():
     print('Welcome, today is: {};'.format(theTime(1)))
@@ -36,7 +53,7 @@ def main():
     
     sOp = -1
     while sOp != 0:
-        print('Select an option:\n1 - CREATE\n0 - EXIT')
+        print('Select an option:\n1 - CREATE\n2 - READ\n0 - EXIT')
         sOp = int(input('\nEnter selected option: '))
 
         if sOp == 1:
@@ -48,8 +65,12 @@ def main():
             dAnime = '{} (ep: {}, season: {})\n'.format(name, ep, sea)
             addAnime(dAnime)
             print('\n----------END CREATE ANIMES----------\n')
+        if sOp == 2:
+            print('\n----------START READ ANIMES----------\nEx: <note> on <MM/DD/YYYY>\n')
+            allAnimes()
+            print('\n----------END READ ANIMES----------\n')
         if ((sOp < 1 and sOp != 0) or sOp > 4):
-            print('(^∇^)b - "sorry, i can\'t make this."')
+            print('(^-^)b - "sorry, i can\'t make this."')
         if sOp == 0:
             exit()
         # wait user press 'ENTER' key
