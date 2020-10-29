@@ -19,7 +19,7 @@ def getLen():
             # returns a list of remaining lines of the entire file
             qSa = file.readlines()
 
-            # return notes lenght in file
+            # return quantity of animes in file
             return len(qSa)
     except:
         return -1
@@ -27,7 +27,7 @@ def getLen():
 def addAnime(tAnime):
     try:
         with open('assets/list.txt', 'a', encoding = 'utf-8') as file:
-            # write new note at the EOF line - <note> on <MM/DD/YYYY>
+            # write new note at the EOF line - <anime> (ep: <episode>, season: <season>)
             file.write('{}'.format(tAnime))
         print('You added a new anime to the list.')
         
@@ -114,11 +114,11 @@ def main():
             addAnime(dAnime)
             print('\n----------END CREATE ANIMES----------\n')
         if sOp == 2:
-            print('\n----------START READ ANIMES----------\nEx: <note> on <MM/DD/YYYY>\n')
+            print('\n----------START READ ANIMES----------\nEx: <line> - <anime> (ep: <episode>, season: <season>)\n')
             allAnimes()
             print('\n----------END READ ANIMES----------\n')
         if sOp == 3:
-            print('\n----------START EDIT ANIMES----------\nEx: <line> - <anime> (ep: <episode>, season: <season>)\n')
+            print('\n----------START EDIT ANIMES----------\n')
             updateEpSe()
             print('\n----------END EDIT ANIMES----------\n')
         if sOp == 4:
