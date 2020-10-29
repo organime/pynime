@@ -27,7 +27,7 @@ def getLen():
 def addAnime(tAnime):
     try:
         with open('assets/list.txt', 'a', encoding = 'utf-8') as file:
-            # write new note at the EOF line - <anime> (ep: <episode>, season: <season>)
+            # add new anime at the EOF - <anime> (ep: <episode>, season: <season>)
             file.write('{}'.format(tAnime))
         print('You added a new anime to the list.')
         
