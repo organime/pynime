@@ -69,7 +69,7 @@ def editAnimeJson():
         line = int(input('What is the line you want to edit: '))
 
         if (line <= len(svdAn) and line >= 1):
-            op = int(input("You want change: \n1 - name, episode and season\n2 - episode and season\n3 - only episode\nOption: "))
+            op = int(input("\nYou want change: \n1 - name, episode and season\n2 - episode and season\n3 - only episode\nOption: "))
 
             if (op == 1):
                 nName = input('Enter the name: ')
@@ -94,7 +94,7 @@ def editAnimeJson():
 
                 print("\nEdit: {} - (episode: {}, season: {}) to {} - (episode: {}, season: {})".format(svdAn[line-1]["name"], svdAn[line-1]["episode"], svdAn[line-1]["season"], acName, nEp, acSea))
                 svdAn[line-1] = {"name": acName, "episode": int(nEp), "season": acSea}
-            if (op >= 3 or op <= 1):
+            if (op > 3 or op < 1):
                 print('(^-^)b - "sorry, i can\'t make this."')
             saveJson(svdAn)
         else:
@@ -119,6 +119,22 @@ def deleteAnimeJson():
         else:
             print('(^-^)b - "sorry, i can\'t make this."')
 
+def convertToTxt():
+    # loads json data in array
+    svdAn = loadJson()
+
+    if not svdAn:
+        print("You don\'t have saved animes.")
+    else:
+        try:
+            with open('assets/list.txt', 'w', encoding = 'utf-8') as file:
+                for i, line in enumerate(svdAn):
+                    fAnimes = "{} (episode: {}, season: {})\n".format(svdAn[i]["name"], svdAn[i]["episode"], svdAn[i]["season"])
+                    # add new anime at the EOF - <anime> (ep: <episode>, season: <season>)
+                    file.write(fAnimes)
+        except:
+            print('Have any error in conversion of file.')
+
 def main():
     print('Welcome, today is: {};'.format(theTime(1)))
     print('----------MENU----------')
@@ -135,20 +151,24 @@ def main():
             sea = input('Enter the season: ')
 
             addAnimeJson(name, ep, sea)
+            convertToTxt()
             print('\n----------END CREATE ANIMES----------\n')
         if sOp == 2:
             print('\n----------START READ ANIMES----------\n')
             allAnimesJson()
+            convertToTxt()
             print('\n----------END READ ANIMES----------\n')
         if sOp == 3:
             print('\n----------START EDIT ANIMES----------\n')
             editAnimeJson()
+            convertToTxt()
             print('\n----------END EDIT ANIMES----------\n')
         if sOp == 4:
             print('\n----------START DELETE ANIMES----------\n')
             deleteAnimeJson()
+            convertToTxt()
             print('\n----------END DELETE ANIMES----------\n')
-        if ((sOp < 1 and sOp != 0) or sOp > 4):
+        if ((sOp < 1 and sOp != 0) or sOp > 5):
             print('(^-^)b - "sorry, i can\'t make this."')
         if sOp == 0:
             exit()
