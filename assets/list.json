@@ -1,12 +1,22 @@
 [
     {
+        "season": 1,
         "name": "naruto",
-        "episode": 1,
-        "season": 1
+        "episode": 1
     },
     {
-        "name": "pokemon",
-        "episode": 10,
-        "season": 1
+        "season": 2,
+        "name": "snk",
+        "episode": 2
+    },
+    {
+        "season": 1,
+        "name": "HxH",
+        "episode": 1
+    },
+    {
+        "season": 1,
+        "name": "steins;gate",
+        "episode": 21
     }
 ]

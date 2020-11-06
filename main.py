@@ -52,9 +52,29 @@ def allAnimesJson():
     if not svdAn:
         print("You don\'t have saved animes.")
     else:
+        print("Ex: <line> - <anime> (ep: <episode>, season: <season>)\n")
         for i, line in enumerate(svdAn):
             print("{} - {} (episode: {}, season: {})".format(i+1, svdAn[i]["name"], svdAn[i]["episode"], svdAn[i]["season"]))
         print("\nYou have {} animes in list.".format(len(svdAn)))
+
+def deleteAnimeJson():
+    # loads json data in array
+    svdAn = loadJson()
+
+    if not svdAn:
+        print("You don\'t have saved animes.")
+    else:
+        allAnimesJson()
+
+        line = int(input('What is the line you want to delete: '))
+
+        if (line <= len(svdAn) and line >= 1):
+            print("\nRemove: {} - (episode: {}, season: {}".format(svdAn[line-1]["name"], svdAn[line-1]["episode"], svdAn[line-1]["season"]))
+
+            svdAn.pop(line-1)
+            saveJson(svdAn)
+        else:
+            print('(^-^)b - "sorry, i can\'t make this."')
 
 def main():
     print('Welcome, today is: {};'.format(theTime(1)))
@@ -62,7 +82,7 @@ def main():
     
     sOp = -1
     while sOp != 0:
-        print('Select an option:\n1 - CREATE\n2 - READ\n0 - EXIT')
+        print('Select an option:\n1 - CREATE\n2 - READ\n4 - DELETE\n0 - EXIT')
         sOp = int(input('\nEnter selected option: '))
 
         if sOp == 1:
@@ -74,9 +94,13 @@ def main():
             addAnimeJson(name, ep, sea)
             print('\n----------END CREATE ANIMES----------\n')
         if sOp == 2:
-            print('\n----------START READ ANIMES----------\nEx: <line> - <anime> (ep: <episode>, season: <season>)\n')
+            print('\n----------START READ ANIMES----------\n')
             allAnimesJson()
             print('\n----------END READ ANIMES----------\n')
+        if sOp == 4:
+            print('\n----------START DELETE ANIMES----------\n')
+            deleteAnimeJson()
+            print('\n----------END DELETE ANIMES----------\n')
         if ((sOp < 1 and sOp != 0) or sOp > 4):
             print('(^-^)b - "sorry, i can\'t make this."')
         if sOp == 0:
