@@ -45,13 +45,24 @@ def addAnimeJson(sName, sEp, sSea):
     saveJson(svdAn)
     print('You added a new anime to the list.')
 
+def allAnimesJson():
+    # loads json data in array
+    svdAn = loadJson()
+
+    if not svdAn:
+        print("You don\'t have saved animes.")
+    else:
+        for i, line in enumerate(svdAn):
+            print("{} - {} (episode: {}, season: {})".format(i+1, svdAn[i]["name"], svdAn[i]["episode"], svdAn[i]["season"]))
+        print("\nYou have {} animes in list.".format(len(svdAn)))
+
 def main():
     print('Welcome, today is: {};'.format(theTime(1)))
     print('----------MENU----------')
     
     sOp = -1
     while sOp != 0:
-        print('Select an option:\n1 - CREATE\n0 - EXIT')
+        print('Select an option:\n1 - CREATE\n2 - READ\n0 - EXIT')
         sOp = int(input('\nEnter selected option: '))
 
         if sOp == 1:
@@ -62,6 +73,10 @@ def main():
 
             addAnimeJson(name, ep, sea)
             print('\n----------END CREATE ANIMES----------\n')
+        if sOp == 2:
+            print('\n----------START READ ANIMES----------\nEx: <line> - <anime> (ep: <episode>, season: <season>)\n')
+            allAnimesJson()
+            print('\n----------END READ ANIMES----------\n')
         if ((sOp < 1 and sOp != 0) or sOp > 4):
             print('(^-^)b - "sorry, i can\'t make this."')
         if sOp == 0:
