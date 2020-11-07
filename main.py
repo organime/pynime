@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import os
-import json
 from datetime import datetime
 
 def theTime(tOp):
@@ -14,153 +13,87 @@ def theTime(tOp):
         # return mm/dd/YY format
         return now.strftime('%m/%d/%Y')
 
-def loadJson():
+def getLen():
     try:
-        with open("assets/list.json", "r") as file:
-            data = json.load(file)
-        return data
-    except:
-        print('Have any error while we are loading the file.')
+        with open('assets/list.txt', 'r', encoding = 'utf-8') as file:
+            # returns a list of remaining lines of the entire file
+            qSa = file.readlines()
 
-def saveJson(data):
+            # return quantity of animes in file
+            return len(qSa)
+    except:
+        return -1
+
+def addAnime(tAnime):
     try:
-        with open("assets/list.json", "w") as file:
-            json.dump(data, file, indent = 4)
+        with open('assets/list.txt', 'a', encoding = 'utf-8') as file:
+            # add new anime at the EOF - <anime> (ep: <episode>, season: <season>)
+            file.write('{}'.format(tAnime))
+        print('You added a new anime to the list.')
+        
     except:
-        print('Have any error while we are saving new anime.')
+        print('We have any error while opening the file.')
 
-def addAnimeJson(sName, sEp, sSea):
-    # loads json data in array
-    svdAn = loadJson()
+def allAnimes():
+    try:
+        with open('assets/list.txt', 'r', encoding = 'utf-8') as file:
+            # bring file cursor to initial position
+            file.seek(0)
+            allLines = file.readlines()
 
-    # have animes with the episode 0
-    if (int(sEp) >= 0 and int(sSea) > 0 and (sName != "" or sName != " ")):
-        # new object with the anime's information
-        sAn = {"name": sName, "episode": int(sEp), "season": int(sSea)}
-        if not svdAn:
-            # add new anime in the end of array
-            svdAn = [sAn]
+            for i, line in enumerate(allLines):
+                print("{} - {}".format(i+1, line.strip()))
+            print("\nYou have {} animes in list.".format(getLen()))
+    except:
+        print('We have any error while opening the file.')
+
+def updateEpSe():
+    try:
+        allLines = []
+        with open('assets/list.txt', 'r', encoding = 'utf-8') as file:
+            allAnimes()
+            sLine = int(input('What is the line you want to change: '))
+
+            sEp = input('Okay, enter the new episode: ')
+            sSe = input('Okay, enter the new season: ')
+
+            # returns a list of remaining lines of the entire file
+            allLines = file.readlines()
+
+            spline = allLines[sLine-1].split(" (")
+
+            # .strip() removes any leading (spaces at the beginning) and trailing (spaces at the end)
+            print('Edit "{}" to: {} (ep: {}, season: {})\n'.format(allLines[sLine-1].strip(), spline[0].strip(), sEp, sSe))
+            allLines[sLine - 1] = '{} (ep: {}, season: {})\n'.format(spline[0].strip(), sEp, sSe)
+
+        with open('assets/list.txt', 'w', encoding = 'utf-8') as file:
+            for nLines in allLines:
+                file.write(nLines)
+        print('Your anime are edited with success.')
+    except:
+        print('We have any error while opening the file.')
+
+def delete():
+    try:
+        allLines = []
+
+        allAnimes()
+        sLine = int(input('What is the line you want to delete: '))
+
+        if sLine <= getLen() and sLine >= 1:
+            with open('assets/list.txt', 'r', encoding = 'utf-8') as file:
+                # .pop() removes the element at the specified position
+                allLines = file.readlines()
+                allLines.pop(sLine - 1)
+
+                with open('assets/list.txt', 'w', encoding = 'utf-8') as file:
+                    for nLines in allLines:
+                        file.write(nLines)
+            print('Your anime are deleted with success.')
         else:
-            svdAn.append(sAn)
-        # save the content in json
-        saveJson(svdAn)
-        print("You added a new anime to the list.")
-    else:
-        print("Invalid name, episode or season.")
-
-def allAnimesJson():
-    # loads json data in array
-    svdAn = loadJson()
-
-    if not svdAn:
-        print("You don\'t have saved animes.")
-    else:
-        print("Ex: <line> - <anime> (ep: <episode>, season: <season>)\n")
-        for i, line in enumerate(svdAn):
-            print("{} - {} (episode: {}, season: {})".format(i+1, svdAn[i]["name"], svdAn[i]["episode"], svdAn[i]["season"]))
-        print("\nYou have {} animes in list.".format(len(svdAn)))
-
-def editAnimeJson():
-    # loads json data in array
-    svdAn = loadJson()
-
-    if not svdAn:
-        print("You don\'t have saved animes.")
-    else:
-        allAnimesJson()
-
-        line = int(input('What is the line you want to edit: '))
-
-        if (line <= len(svdAn) and line >= 1):
-            print("\nYou want change: \n1 - name, episode and season\n2 - episode and season\n3 - only name\n4 - only episode\n5 - only season\n\nEditing: {} - (episode: {}, season: {})".format(svdAn[line-1]["name"], svdAn[line-1]["episode"], svdAn[line-1]["season"]))
-            op = int(input("\nOption: "))
-
-            acName = svdAn[line-1]["name"]
-            acEp = svdAn[line-1]["episode"]
-            acSea = svdAn[line-1]["season"]
-            if (op == 1):
-                nName = input('Enter the name: ')
-                nEp = int(input('Enter the episode: '))
-                nSea = int(input('Enter the season: '))
-
-                if (nEp >= 0 and nSea > 0 and (nName != "" or nName != " ")):
-                    print("\nEdit: {} - (episode: {}, season: {}) to {} - (episode: {}, season: {})".format(svdAn[line-1]["name"], svdAn[line-1]["episode"], svdAn[line-1]["season"], nName, nEp, nSea))
-                    svdAn[line-1] = {"name": nName, "episode": int(nEp), "season": int(nSea)}
-                else:
-                    print("Invalid name, episode or season.")
-            if (op == 2):
-                nEp = int(input('Enter the episode: '))
-                nSea = int(input('Enter the season: '))
-
-                if (nEp >= 0 and nSea > 0):
-                    print("\nEdit: {} - (episode: {}, season: {}) to {} - (episode: {}, season: {})".format(svdAn[line-1]["name"], svdAn[line-1]["episode"], svdAn[line-1]["season"], acName, nEp, nSea))
-                    svdAn[line-1] = {"name": acName, "episode": int(nEp), "season": int(nSea)}
-                else:
-                    print("Invalid episode or season.")
-            if (op == 3):
-                nName = input('Enter the name: ')
-
-                if (nName != "" and nName != " "):
-                    print("\nEdit: {} - (episode: {}, season: {}) to {} - (episode: {}, season: {})".format(svdAn[line-1]["name"], svdAn[line-1]["episode"], svdAn[line-1]["season"], nName, acEp, acSea))
-                    svdAn[line-1] = {"name": nName, "episode": acEp, "season": acSea}
-                else:
-                    print("Invalid name.")
-            if (op == 4):
-                nEp = int(input('Enter the episode: '))
-
-                if (nEp >= 0):
-                    print("\nEdit: {} - (episode: {}, season: {}) to {} - (episode: {}, season: {})".format(svdAn[line-1]["name"], svdAn[line-1]["episode"], svdAn[line-1]["season"], acName, nEp, acSea))
-                    svdAn[line-1] = {"name": acName, "episode": int(nEp), "season": acSea}
-                else:
-                    print("Invalid episode.")
-            if (op == 5):
-                nSea = int(input('Enter the season: '))
-
-                if (nSea > 0):
-                    print("\nEdit: {} - (episode: {}, season: {}) to {} - (episode: {}, season: {})".format(svdAn[line-1]["name"], svdAn[line-1]["episode"], svdAn[line-1]["season"], acName, acEp, nSea))
-                    svdAn[line-1] = {"name": acName, "episode": acEp, "season": int(nSea)}
-                else:
-                    print("Invalid season.")
-            if (op > 5 or op < 1):
-                print('(^-^)b - "sorry, i can\'t make this."')
-            saveJson(svdAn)
-        else:
-            print('(^-^)b - "sorry, i can\'t make this."')
-
-def deleteAnimeJson():
-    # loads json data in array
-    svdAn = loadJson()
-
-    if not svdAn:
-        print("You don\'t have saved animes.")
-    else:
-        allAnimesJson()
-
-        line = int(input('What is the line you want to delete: '))
-
-        if (line <= len(svdAn) and line >= 1):
-            print("\nRemoved: {} - (episode: {}, season: {})".format(svdAn[line-1]["name"], svdAn[line-1]["episode"], svdAn[line-1]["season"]))
-
-            svdAn.pop(line-1)
-            saveJson(svdAn)
-        else:
-            print('(^-^)b - "sorry, i can\'t make this."')
-
-def convertToTxt():
-    # loads json data in array
-    svdAn = loadJson()
-
-    if not svdAn:
-        print("You don\'t have saved animes.")
-    else:
-        try:
-            with open('assets/list.txt', 'w', encoding = 'utf-8') as file:
-                for i, line in enumerate(svdAn):
-                    fAnimes = "{} (episode: {}, season: {})\n".format(svdAn[i]["name"], svdAn[i]["episode"], svdAn[i]["season"])
-                    # add new anime at the EOF - <anime> (ep: <episode>, season: <season>)
-                    file.write(fAnimes)
-        except:
-            print('Have any error in conversion of file.')
+            print("Invalid line.")
+    except:
+        print('We have any error while opening the file.')
 
 def main():
     print('Welcome, today is: {};'.format(theTime(1)))
@@ -177,25 +110,25 @@ def main():
             ep = input('Enter the episode: ')
             sea = input('Enter the season: ')
 
-            addAnimeJson(name, ep, sea)
+            dAnime = '{} (ep: {}, season: {})\n'.format(name, ep, sea)
+            addAnime(dAnime)
             print('\n----------END CREATE ANIMES----------\n')
         if sOp == 2:
-            print('\n----------START READ ANIMES----------\n')
-            allAnimesJson()
+            print('\n----------START READ ANIMES----------\nEx: <line> - <anime> (ep: <episode>, season: <season>)\n')
+            allAnimes()
             print('\n----------END READ ANIMES----------\n')
         if sOp == 3:
             print('\n----------START EDIT ANIMES----------\n')
-            editAnimeJson()
+            updateEpSe()
             print('\n----------END EDIT ANIMES----------\n')
         if sOp == 4:
             print('\n----------START DELETE ANIMES----------\n')
-            deleteAnimeJson()
+            delete()
             print('\n----------END DELETE ANIMES----------\n')
-        if ((sOp < 1 and sOp != 0) or sOp > 5):
+        if ((sOp < 1 and sOp != 0) or sOp > 4):
             print('(^-^)b - "sorry, i can\'t make this."')
         if sOp == 0:
             exit()
-        convertToTxt()
         # wait user press 'ENTER' key
         input("Press Enter to continue...")
 main()
