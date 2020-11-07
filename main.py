@@ -110,8 +110,11 @@ def main():
             ep = input('Enter the episode: ')
             sea = input('Enter the season: ')
 
-            dAnime = '{} (ep: {}, season: {})\n'.format(name, ep, sea)
-            addAnime(dAnime)
+            if (int(ep) >= 0 and int(sea) > 0 and (name != "" or name != " ")):
+                dAnime = '{} (ep: {}, season: {})\n'.format(name, ep, sea)
+                addAnime(dAnime)
+            else:
+                print("Invalid name, episode or season.")
             print('\n----------END CREATE ANIMES----------\n')
         if sOp == 2:
             print('\n----------START READ ANIMES----------\nEx: <line> - <anime> (ep: <episode>, season: <season>)\n')
