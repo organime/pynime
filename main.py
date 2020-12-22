@@ -20,7 +20,7 @@ def loadJson():
             data = json.load(file)
         return data
     except:
-        print('Have any error while we are loading the file.')
+        return {}
 
 def saveJson(data):
     try:
@@ -52,24 +52,22 @@ def allAnimesJson():
     # loads json data in array
     svdAn = loadJson()
 
-    if not svdAn:
-        print("You don\'t have saved animes.")
-    else:
+    if svdAn:
         print("Ex: <line> - <anime> (ep: <episode>, season: <season>)\n")
         for i, line in enumerate(svdAn):
             print("{} - {} (episode: {}, season: {})".format(i+1, svdAn[i]["name"], svdAn[i]["episode"], svdAn[i]["season"]))
-        print("\nYou have {} animes in list.".format(len(svdAn)))
+        print("\nYou have {} animes in the list.".format(len(svdAn)))
+    else:
+        print("You don\'t have saved animes.")
 
 def editAnimeJson():
     # loads json data in array
     svdAn = loadJson()
 
-    if not svdAn:
-        print("You don\'t have saved animes.")
-    else:
+    if svdAn:
         allAnimesJson()
 
-        line = int(input('What is the line you want to edit: '))
+        line = int(input('Which line you want to delete: '))
 
         if (line <= len(svdAn) and line >= 1):
             print("\nYou want change: \n1 - name, episode and season\n2 - episode and season\n3 - only name\n4 - only episode\n5 - only season\n\nEditing: {} - (episode: {}, season: {})".format(svdAn[line-1]["name"], svdAn[line-1]["episode"], svdAn[line-1]["season"]))
@@ -87,7 +85,7 @@ def editAnimeJson():
                     print("\nEdit: {} - (episode: {}, season: {}) to {} - (episode: {}, season: {})".format(svdAn[line-1]["name"], svdAn[line-1]["episode"], svdAn[line-1]["season"], nName, nEp, nSea))
                     svdAn[line-1] = {"name": nName, "episode": int(nEp), "season": int(nSea)}
                 else:
-                    print("Invalid name, episode or season.")
+                    print("Invalid selected name, episode or season.")
             if (op == 2):
                 nEp = int(input('Enter the episode: '))
                 nSea = int(input('Enter the season: '))
@@ -96,7 +94,7 @@ def editAnimeJson():
                     print("\nEdit: {} - (episode: {}, season: {}) to {} - (episode: {}, season: {})".format(svdAn[line-1]["name"], svdAn[line-1]["episode"], svdAn[line-1]["season"], acName, nEp, nSea))
                     svdAn[line-1] = {"name": acName, "episode": int(nEp), "season": int(nSea)}
                 else:
-                    print("Invalid episode or season.")
+                    print("Invalid selected episode or season.")
             if (op == 3):
                 nName = input('Enter the name: ')
 
@@ -104,7 +102,7 @@ def editAnimeJson():
                     print("\nEdit: {} - (episode: {}, season: {}) to {} - (episode: {}, season: {})".format(svdAn[line-1]["name"], svdAn[line-1]["episode"], svdAn[line-1]["season"], nName, acEp, acSea))
                     svdAn[line-1] = {"name": nName, "episode": acEp, "season": acSea}
                 else:
-                    print("Invalid name.")
+                    print("Invalid selected name.")
             if (op == 4):
                 nEp = int(input('Enter the episode: '))
 
@@ -112,7 +110,7 @@ def editAnimeJson():
                     print("\nEdit: {} - (episode: {}, season: {}) to {} - (episode: {}, season: {})".format(svdAn[line-1]["name"], svdAn[line-1]["episode"], svdAn[line-1]["season"], acName, nEp, acSea))
                     svdAn[line-1] = {"name": acName, "episode": int(nEp), "season": acSea}
                 else:
-                    print("Invalid episode.")
+                    print("Invalid selected episode.")
             if (op == 5):
                 nSea = int(input('Enter the season: '))
 
@@ -120,23 +118,23 @@ def editAnimeJson():
                     print("\nEdit: {} - (episode: {}, season: {}) to {} - (episode: {}, season: {})".format(svdAn[line-1]["name"], svdAn[line-1]["episode"], svdAn[line-1]["season"], acName, acEp, nSea))
                     svdAn[line-1] = {"name": acName, "episode": acEp, "season": int(nSea)}
                 else:
-                    print("Invalid season.")
+                    print("Invalid selected season.")
             if (op > 5 or op < 1):
-                print('(^-^)b - "sorry, i can\'t make this."')
+                print('Invalid selected option.')
             saveJson(svdAn)
         else:
-            print('(^-^)b - "sorry, i can\'t make this."')
+            print('Invalid selected line.')
+    else:
+        print("You don\'t have saved animes.")
 
 def deleteAnimeJson():
     # loads json data in array
     svdAn = loadJson()
 
-    if not svdAn:
-        print("You don\'t have saved animes.")
-    else:
+    if svdAn:
         allAnimesJson()
 
-        line = int(input('What is the line you want to delete: '))
+        line = int(input('Which line you want to delete: '))
 
         if (line <= len(svdAn) and line >= 1):
             print("\nRemoved: {} - (episode: {}, season: {})".format(svdAn[line-1]["name"], svdAn[line-1]["episode"], svdAn[line-1]["season"]))
@@ -144,15 +142,15 @@ def deleteAnimeJson():
             svdAn.pop(line-1)
             saveJson(svdAn)
         else:
-            print('(^-^)b - "sorry, i can\'t make this."')
+            print('Invalid selected line.')
+    else:
+        print("You don\'t have saved animes.")
 
 def convertToTxt():
     # loads json data in array
     svdAn = loadJson()
 
-    if not svdAn:
-        print("You don\'t have saved animes.")
-    else:
+    if svdAn:
         try:
             with open('assets/list.txt', 'w', encoding = 'utf-8') as file:
                 for i, line in enumerate(svdAn):
@@ -160,15 +158,17 @@ def convertToTxt():
                     # add new anime at the EOF - <anime> (ep: <episode>, season: <season>)
                     file.write(fAnimes)
         except:
-            print('Have any error in conversion of file.')
+            print('Have any error in .txt conversion of file.')
+    # else:
+    #     print("You don\'t have saved animes.")
 
 def main():
     print('Welcome, today is: {};'.format(theTime(1)))
-    print('----------MENU----------')
     
     sOp = -1
     while sOp != 0:
-        print('Select an option:\n1 - CREATE\n2 - READ\n3 - EDIT\n4 - DELETE\n0 - EXIT')
+        print('----------MENU----------')
+        print('Select an option:\n1 - CREATE\n2 - VIEW\n3 - EDIT\n4 - DELETE\n0 - EXIT')
         sOp = int(input('\nEnter selected option: '))
 
         if sOp == 1:
@@ -180,9 +180,9 @@ def main():
             addAnimeJson(name, ep, sea)
             print('\n----------END CREATE ANIMES----------\n')
         if sOp == 2:
-            print('\n----------START READ ANIMES----------\n')
+            print('\n----------START VIEW ANIMES----------\n')
             allAnimesJson()
-            print('\n----------END READ ANIMES----------\n')
+            print('\n----------END VIEW ANIMES----------\n')
         if sOp == 3:
             print('\n----------START EDIT ANIMES----------\n')
             editAnimeJson()
