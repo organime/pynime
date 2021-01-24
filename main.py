@@ -3,6 +3,9 @@ import os
 import json
 from datetime import datetime
 
+def clear():
+    os.system('cls' if os.name=='nt' else 'clear')
+
 def theTime(tOp):
     # current date and time
     now = datetime.now()
@@ -198,4 +201,7 @@ def main():
         convertToTxt()
         # wait user press 'ENTER' key
         input("Press Enter to continue...")
+
+        # clear console
+        clear()
 main()

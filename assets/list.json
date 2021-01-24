@@ -1,22 +1,22 @@
 [
     {
         "episode": 14,
-        "name": "Naruto",
-        "season": 2
+        "season": 2,
+        "name": "Naruto"
     },
     {
-        "name": "SNK",
         "episode": 14,
-        "season": 2
+        "season": 2,
+        "name": "SNK"
     },
     {
-        "episode": 2,
-        "name": "HxH",
-        "season": 2
+        "episode": 14,
+        "season": 2,
+        "name": "HxH"
     },
     {
-        "name": "Steins;Gate",
-        "episode": 4,
-        "season": 2
+        "episode": 14,
+        "season": 2,
+        "name": "Steins;Gate"
     }
 ]
