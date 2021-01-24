@@ -162,8 +162,6 @@ def convertToTxt():
                     file.write(fAnimes)
         except:
             print('Have any error in .txt conversion of file.')
-    # else:
-    #     print("You don\'t have saved animes.")
 
 def main():
     print('Welcome, today is: {};'.format(theTime(1)))
